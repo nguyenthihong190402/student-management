@@ -2,6 +2,8 @@ package com.example.student_management.service.impl;
 
 import com.example.student_management.converter.request.StudentRequestConverter;
 import com.example.student_management.converter.response.StudentResponseConverter;
+import com.example.student_management.exception.AppException;
+import com.example.student_management.exception.ErrorCode;
 import com.example.student_management.model.request.StudentRequest;
 import com.example.student_management.model.response.StudentResponse;
 import com.example.student_management.repository.StudentRepository;
@@ -20,6 +22,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse createStudent(StudentRequest studentRequest) {
+        if (studentRepository.existsByEmail(studentRequest.getEmail())) {
+            throw new AppException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        if (studentRepository.existsByStudentCode(studentRequest.getStudentCode())) {
+            throw new AppException(ErrorCode.DUPLICATE_STUDENT_CODE);
+        }
         return studentResponseConverter.toDto(studentRepository.save(studentRequestConverter.toEntity(studentRequest)));
     }
 }
