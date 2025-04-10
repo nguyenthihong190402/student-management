@@ -1,16 +1,15 @@
 package com.example.student_management.api.student;
 
-import com.example.student_management.model.request.StudentRequest;
+import com.example.student_management.model.request.StudentCreateRequest;
+import com.example.student_management.model.request.StudentUpdateRequest;
+import com.example.student_management.model.request.UpdateStatusRequest;
 import com.example.student_management.model.response.StudentResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/students")
@@ -20,7 +19,7 @@ public class StudentApiController implements StudentApi {
     private final StudentApiDelegate delegate;
 
     @Override
-    public ResponseEntity<StudentResponse> createStudent(StudentRequest request) {
+    public ResponseEntity<StudentResponse> createStudent(StudentCreateRequest request) {
         return delegate.createStudent(request);
     }
 
@@ -32,5 +31,15 @@ public class StudentApiController implements StudentApi {
     @Override
     public ResponseEntity<Page<StudentResponse>> searchStudent(String keyword, Integer pageNumber, Integer pageSize) {
         return delegate.searchStudent(keyword, pageNumber, pageSize);
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStudent(Long id,StudentUpdateRequest request) {
+        return delegate.updateStudent(id , request);
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStatusStudent(Long id, UpdateStatusRequest request) {
+        return delegate.updateStatusStudent(id, request);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.student_management.delegate;
 
 import com.example.student_management.api.student.StudentApiDelegate;
-import com.example.student_management.model.request.StudentRequest;
+import com.example.student_management.model.request.StudentCreateRequest;
+import com.example.student_management.model.request.StudentUpdateRequest;
+import com.example.student_management.model.request.UpdateStatusRequest;
 import com.example.student_management.model.response.StudentResponse;
 import com.example.student_management.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class StudentApiDelegateImpl implements StudentApiDelegate {
     private final StudentService studentService;
 
     @Override
-    public ResponseEntity<StudentResponse> createStudent(StudentRequest studentRequest) {
+    public ResponseEntity<StudentResponse> createStudent(StudentCreateRequest studentRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createStudent(studentRequest));
     }
 
@@ -33,5 +35,15 @@ public class StudentApiDelegateImpl implements StudentApiDelegate {
     public ResponseEntity<Page<StudentResponse>> searchStudent(String keyword, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return ResponseEntity.ok(studentService.searchStudent(keyword, pageable));
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStudent(Long id, StudentUpdateRequest request) {
+        return ResponseEntity.ok(studentService.updateStudent(id,request));
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStatusStudent(Long id, UpdateStatusRequest request) {
+        return ResponseEntity.ok(studentService.updateStatus(id, request));
     }
 }

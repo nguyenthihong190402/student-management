@@ -2,13 +2,13 @@ package com.example.student_management.converter.request;
 
 import com.example.student_management.converter.BaseConverter;
 import com.example.student_management.model.entity.Student;
-import com.example.student_management.model.request.StudentRequest;
+import com.example.student_management.model.request.StudentCreateRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StudentRequestConverter extends BaseConverter<Student, StudentRequest> {
+public class StudentRequestConverter extends BaseConverter<Student, StudentCreateRequest> {
     @Override
-    public Student toEntity(StudentRequest studentRequest) {
+    public Student toEntity(StudentCreateRequest studentRequest) {
         Student student = super.toEntity(studentRequest);
         student.setStudentCode(studentRequest.getStudentCode());
         student.setEmail(studentRequest.getEmail());
