@@ -6,6 +6,9 @@ import com.example.student_management.model.response.StudentResponse;
 import com.example.student_management.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,5 +22,16 @@ public class StudentApiDelegateImpl implements StudentApiDelegate {
     @Override
     public ResponseEntity<StudentResponse> createStudent(StudentRequest studentRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createStudent(studentRequest));
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> getStudentById(Long id) {
+        return ResponseEntity.ok(studentService.getStudentById(id));
+    }
+
+    @Override
+    public ResponseEntity<Page<StudentResponse>> searchStudent(String keyword, Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return ResponseEntity.ok(studentService.searchStudent(keyword, pageable));
     }
 }
