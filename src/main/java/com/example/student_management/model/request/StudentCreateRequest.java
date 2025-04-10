@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class StudentRequest {
+public class StudentCreateRequest {
     private String studentCode;
     private String name;
     private String email;
