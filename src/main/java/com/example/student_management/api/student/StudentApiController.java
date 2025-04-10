@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/student")
+@RequestMapping("/students")
 @RequiredArgsConstructor
 @Slf4j
 public class StudentApiController implements StudentApi {
