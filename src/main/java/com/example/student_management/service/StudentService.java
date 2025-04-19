@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface StudentService {
     StudentResponse createStudent(StudentCreateRequest studentRequest);
-    StudentResponse getStudentById(Long id);
+    StudentResponse getStudentByUserId(Long id);
     Page<StudentResponse> searchStudent(String keyword, Pageable pageable);
     StudentResponse updateStudent(Long id, StudentUpdateRequest request);
     StudentResponse updateStatus(Long id, UpdateStatusRequest request);

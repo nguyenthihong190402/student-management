@@ -10,23 +10,20 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Table(name = "student")
-public class Student extends BaseEntity {
+@Table(name = "students")
+public class StudentEntity extends BaseEntity {
     @Column(unique = true)
     private String studentCode;
     private String name;
-    @Column(unique = true)
-    private String email;
-    private String phone;
     private LocalDate dateOfBirth;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
     private String address;
     private String major;
     private String enrolledAt;
-
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }
