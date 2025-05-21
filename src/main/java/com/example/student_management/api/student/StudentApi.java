@@ -7,6 +7,7 @@ import com.example.student_management.model.response.StudentResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 public interface StudentApi {
@@ -15,47 +16,31 @@ public interface StudentApi {
         };
     }
 
-    @RequestMapping(
-            method = {RequestMethod.POST},
-            produces = {"application/json"}
-    )
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping
     default ResponseEntity<StudentResponse> createStudent(@RequestBody() StudentCreateRequest request) {
         return this.getDelegate().createStudent(request);
     }
 
-    @RequestMapping(
-            method = {RequestMethod.GET},
-            produces = {"application/json"},
-            path = "/{id}"
-    )
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/{id}")
     default ResponseEntity<StudentResponse> getStudentById(@Valid @PathVariable(value = "id") Long id) {
         return this.getDelegate().getStudentById(id);
     }
 
-    @RequestMapping(
-            method = {RequestMethod.GET},
-            produces = {"application/json"},
-            path = "/search"
-    )
+    @GetMapping("/search")
     default ResponseEntity<Page<StudentResponse>> searchStudent(@RequestParam(required = false) String keyword, @RequestParam(value = "pageNumber") Integer pageNumber, @RequestParam(value = "pageSize") Integer pageSize) {
         return this.getDelegate().searchStudent(keyword, pageNumber, pageSize);
     }
 
-    @RequestMapping(
-            method = {RequestMethod.PUT},
-            produces = {"application/json"},
-            path = "/{id}"
-    )
-    default ResponseEntity<StudentResponse> updateStudent(@PathVariable(value = "id") Long id,@RequestBody StudentUpdateRequest request) {
-        return this.getDelegate().updateStudent(id,request);
+    @PutMapping("/{id}")
+    default ResponseEntity<StudentResponse> updateStudent(@PathVariable(value = "id") Long id, @RequestBody StudentUpdateRequest request) {
+        return this.getDelegate().updateStudent(id, request);
     }
-    @RequestMapping(
-            method = {RequestMethod.PATCH},
-            produces = {"application/json"},
-            path = "/{id}"
-    )
-    default ResponseEntity<StudentResponse> updateStatusStudent(@PathVariable(value = "id") Long id,@RequestBody UpdateStatusRequest request) {
-        return this.getDelegate().updateStatusStudent(id,request);
+
+    @PatchMapping("/{id}")
+    default ResponseEntity<StudentResponse> updateStatusStudent(@PathVariable(value = "id") Long id, @RequestBody UpdateStatusRequest request) {
+        return this.getDelegate().updateStatusStudent(id, request);
     }
 
 }

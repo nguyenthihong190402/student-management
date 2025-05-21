@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeviceTokenRepository extends JpaRepository<DeviceTokenEntity,Long> {
+   DeviceTokenEntity findByTokenAndUser_Id(String token,Long userId);
 }

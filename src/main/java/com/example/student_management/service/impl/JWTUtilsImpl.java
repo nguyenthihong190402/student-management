@@ -1,13 +1,13 @@
 package com.example.student_management.service.impl;
 
-import com.example.student_management.config.JwtAuthenticationFilter;
+import com.example.student_management.model.CustomUserDetails;
 import com.example.student_management.service.JWTUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JWTUtilsImpl implements JWTUtils {
     @Value("${security.jwt.secret-key}")
     private String jwtSecret;
@@ -25,9 +26,10 @@ public class JWTUtilsImpl implements JWTUtils {
     private int jwtExpiration;
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(Authentication authentication) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(customUserDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignKey())
@@ -35,10 +37,10 @@ public class JWTUtilsImpl implements JWTUtils {
     }
 
     @Override
-    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails) {
+    public String generateRefreshToken(Authentication authentication) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(customUserDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignKey())
@@ -52,6 +54,11 @@ public class JWTUtilsImpl implements JWTUtils {
 
     @Override
     public String extractEmail(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    @Override
+    public String extractIdFromToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
