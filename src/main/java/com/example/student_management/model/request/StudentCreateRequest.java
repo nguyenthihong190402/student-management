@@ -11,6 +11,7 @@ public class StudentCreateRequest {
     private String studentCode;
     private String name;
     private String email;
+    private String password;
     private String phone;
     private LocalDate dateOfBirth;
     private Gender gender;

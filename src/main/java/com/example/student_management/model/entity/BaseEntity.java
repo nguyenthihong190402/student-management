@@ -13,7 +13,7 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
     @Column(name = "updated_at")
     private Timestamp updatedAt;

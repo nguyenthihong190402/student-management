@@ -28,7 +28,7 @@ public class StudentApiDelegateImpl implements StudentApiDelegate {
 
     @Override
     public ResponseEntity<StudentResponse> getStudentById(Long id) {
-        return ResponseEntity.ok(studentService.getStudentById(id));
+        return ResponseEntity.ok(studentService.getStudentByUserId(id));
     }
 
     @Override
@@ -38,12 +38,17 @@ public class StudentApiDelegateImpl implements StudentApiDelegate {
     }
 
     @Override
-    public ResponseEntity<StudentResponse> updateStudent(Long id, StudentUpdateRequest request) {
-        return ResponseEntity.ok(studentService.updateStudent(id,request));
+    public ResponseEntity<StudentResponse> updateStudent(Long userId, StudentUpdateRequest request) {
+        return ResponseEntity.ok(studentService.updateStudent(userId, request));
     }
 
     @Override
     public ResponseEntity<StudentResponse> updateStatusStudent(Long id, UpdateStatusRequest request) {
         return ResponseEntity.ok(studentService.updateStatus(id, request));
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> getUserByToken() {
+        return ResponseEntity.ok(studentService.getUserByToken());
     }
 }

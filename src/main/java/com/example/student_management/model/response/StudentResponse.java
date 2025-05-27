@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class StudentResponse extends BaseResponse {
+public class StudentResponse extends BaseResponse{
     private String studentCode;
     private String name;
     private String email;

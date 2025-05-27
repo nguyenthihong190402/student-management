@@ -21,11 +21,15 @@ public interface StudentApiDelegate {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
-    default ResponseEntity<StudentResponse> updateStudent(Long id,StudentUpdateRequest request) {
+    default ResponseEntity<StudentResponse> updateStudent(Long userId, StudentUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     default ResponseEntity<StudentResponse> updateStatusStudent(Long id, UpdateStatusRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    }
+
+    default ResponseEntity<StudentResponse> getUserByToken() {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 }

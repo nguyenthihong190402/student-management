@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/students")
+@RequestMapping("/auth/students")
 @RequiredArgsConstructor
 @Slf4j
 public class StudentApiController implements StudentApi {
@@ -34,12 +34,17 @@ public class StudentApiController implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<StudentResponse> updateStudent(Long id,StudentUpdateRequest request) {
-        return delegate.updateStudent(id , request);
+    public ResponseEntity<StudentResponse> updateStudent(Long userId, StudentUpdateRequest request) {
+        return delegate.updateStudent(userId, request);
     }
 
     @Override
     public ResponseEntity<StudentResponse> updateStatusStudent(Long id, UpdateStatusRequest request) {
         return delegate.updateStatusStudent(id, request);
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> getUserByToken() {
+        return delegate.getUserByToken();
     }
 }
