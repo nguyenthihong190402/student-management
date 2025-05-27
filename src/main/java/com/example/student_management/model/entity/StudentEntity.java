@@ -2,6 +2,7 @@ package com.example.student_management.model.entity;
 
 import com.example.student_management.enums.Gender;
 import com.example.student_management.enums.StudentStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +26,6 @@ public class StudentEntity extends BaseEntity {
     private StudentStatus status;
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private UserEntity user;
 }

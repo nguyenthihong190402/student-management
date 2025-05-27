@@ -4,19 +4,25 @@ import com.example.student_management.converter.request.StudentRequestConverter;
 import com.example.student_management.converter.response.StudentResponseConverter;
 import com.example.student_management.exception.AppException;
 import com.example.student_management.exception.ErrorCode;
+import com.example.student_management.model.CustomUserDetails;
 import com.example.student_management.model.entity.StudentEntity;
 import com.example.student_management.model.entity.UserEntity;
 import com.example.student_management.model.request.StudentCreateRequest;
 import com.example.student_management.model.request.StudentUpdateRequest;
 import com.example.student_management.model.request.UpdateStatusRequest;
 import com.example.student_management.model.response.StudentResponse;
+import com.example.student_management.model.response.UserResponse;
 import com.example.student_management.repository.StudentRepository;
 import com.example.student_management.repository.UserRepository;
+import com.example.student_management.service.JWTUtils;
 import com.example.student_management.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,6 +34,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRequestConverter studentRequestConverter;
     private final StudentResponseConverter studentResponseConverter;
     private final UserRepository userRepository;
+    private final JWTUtils jwtUtils;
 
     @Override
     public StudentResponse createStudent(StudentCreateRequest studentRequest) {
@@ -65,18 +72,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponse updateStudent(Long id, StudentUpdateRequest request) {
-        StudentEntity student = studentRepository.findOneByUserId(id);
-        UserEntity user = userRepository.findOneByEmail(request.getEmail());
+    public StudentResponse updateStudent(Long userId, StudentUpdateRequest request) {
+        StudentEntity student = studentRepository.findOneByUserId(userId);
         if (student == null) {
             throw new AppException(ErrorCode.STUDENT_NOT_FOUNT);
         }
-        if (user != null && !student.getUser().getEmail().equals(request.getEmail())) {
+        if (userRepository.findOneByEmail(request.getEmail()) != null && !student.getUser().getEmail().equals(request.getEmail())) {
             throw new AppException(ErrorCode.DUPLICATE_EMAIL);
         }
-        if (user != null){
+        UserEntity user = student.getUser();
+        if(user != null){
             user.setEmail(request.getEmail());
             user.setPhone(request.getPhone());
+            userRepository.save(user);
         }
         student.setName(request.getName());
         student.setAddress(request.getAddress());
@@ -93,5 +101,19 @@ public class StudentServiceImpl implements StudentService {
         }
         student.setStatus(request.getStatus());
         return studentResponseConverter.toDto(studentRepository.save(student));
+    }
+
+    @Override
+    public StudentResponse getUserByToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        UserEntity user = userRepository.findOneByEmail(userDetails.getEmail());
+        if (user == null) {
+            throw new AppException(ErrorCode.USER_NOT_FOUNT);
+        } else if (studentRepository.findOneByUserId(user.getId()) != null) {
+            return studentResponseConverter.toDto(studentRepository.findOneByUserId(user.getId()));
+        } else {
+            throw new AppException(ErrorCode.STUDENT_NOT_FOUNT);
+        }
     }
 }

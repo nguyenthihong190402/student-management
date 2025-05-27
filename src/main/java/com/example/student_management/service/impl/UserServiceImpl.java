@@ -38,8 +38,9 @@ public class UserServiceImpl implements UserService {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String accessToken = jwtUtils.generateToken(authentication);
-        final String refreshToken = jwtUtils.generateRefreshToken(authentication);
-        return new AuthToken(accessToken, refreshToken, user);
+        final Long userId = user.getId();
+        final String email = user.getEmail();
+        return new AuthToken(accessToken,userId,email);
     }
 
 }

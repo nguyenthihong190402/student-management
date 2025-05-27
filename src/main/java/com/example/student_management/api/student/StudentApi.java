@@ -34,13 +34,18 @@ public interface StudentApi {
     }
 
     @PutMapping("/{id}")
-    default ResponseEntity<StudentResponse> updateStudent(@PathVariable(value = "id") Long id, @RequestBody StudentUpdateRequest request) {
-        return this.getDelegate().updateStudent(id, request);
+    default ResponseEntity<StudentResponse> updateStudent(@PathVariable(value = "id") Long id,@RequestBody StudentUpdateRequest request) {
+        return this.getDelegate().updateStudent(id,request);
     }
 
     @PatchMapping("/{id}")
     default ResponseEntity<StudentResponse> updateStatusStudent(@PathVariable(value = "id") Long id, @RequestBody UpdateStatusRequest request) {
         return this.getDelegate().updateStatusStudent(id, request);
+    }
+
+    @GetMapping("/token")
+    default ResponseEntity<StudentResponse> getUserByToken() {
+        return this.getDelegate().getUserByToken();
     }
 
 }

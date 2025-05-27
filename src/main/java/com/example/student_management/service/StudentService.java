@@ -11,6 +11,7 @@ public interface StudentService {
     StudentResponse createStudent(StudentCreateRequest studentRequest);
     StudentResponse getStudentByUserId(Long id);
     Page<StudentResponse> searchStudent(String keyword, Pageable pageable);
-    StudentResponse updateStudent(Long id, StudentUpdateRequest request);
+    StudentResponse updateStudent(Long userId,StudentUpdateRequest request);
     StudentResponse updateStatus(Long id, UpdateStatusRequest request);
+    StudentResponse getUserByToken();
 }
